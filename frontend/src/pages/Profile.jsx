@@ -543,29 +543,32 @@ const Profile = ({ isInsideSettings = false }) => {
                 <p className="text-[11px] font-bold text-secondary text-center px-2">Drop File Here</p>
               </div>
             )}
-          </motion.div>
-          
-          {/* Picture Controls */}
-          {isEditing && (
-            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 flex space-x-2 bg-navy-900 border border-white/10 p-1.5 rounded-full shadow-xl" onClick={(e) => e.stopPropagation()}>
-              <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
-                onClick={() => setShowPhotoModal(true)}
-                className="p-2 bg-primary rounded-full text-white hover:shadow-primary/30 transition-all" 
-                title="Change Photo Options"
+
+            {/* Picture Controls INSIDE the circle */}
+            {isEditing && (
+              <div 
+                className="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-2 bg-navy-900/90 backdrop-blur-md border border-white/10 p-1 rounded-full shadow-lg z-20"
+                onClick={(e) => e.stopPropagation()}
               >
-                <Upload className="w-3.5 h-3.5" />
-              </motion.button>
-              {(profile.profileImage || profile.profilePhoto) && (
                 <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
-                  onClick={handleRemovePhoto}
-                  className="p-2 bg-red-500 rounded-full text-white hover:shadow-red-500/30 transition-all" 
-                  title="Remove Photo"
+                  onClick={() => setShowPhotoModal(true)}
+                  className="p-1.5 bg-primary rounded-full text-white hover:shadow-primary/30 transition-all" 
+                  title="Change Photo Options"
                 >
-                  <Trash2 className="w-3.5 h-3.5" />
+                  <Upload className="w-3.5 h-3.5" />
                 </motion.button>
-              )}
-            </div>
-          )}
+                {(profile.profileImage || profile.profilePhoto) && (
+                  <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
+                    onClick={handleRemovePhoto}
+                    className="p-1.5 bg-red-500 rounded-full text-white hover:shadow-red-500/30 transition-all" 
+                    title="Remove Photo"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </motion.button>
+                )}
+              </div>
+            )}
+          </motion.div>
           <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileSelect} className="hidden" />
         </div>
 
