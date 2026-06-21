@@ -543,31 +543,6 @@ const Profile = ({ isInsideSettings = false }) => {
                 <p className="text-[11px] font-bold text-secondary text-center px-2">Drop File Here</p>
               </div>
             )}
-
-            {/* Picture Controls INSIDE the circle */}
-            {isEditing && (
-              <div 
-                className="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-2 bg-navy-900/90 backdrop-blur-md border border-white/10 p-1 rounded-full shadow-lg z-20"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
-                  onClick={() => setShowPhotoModal(true)}
-                  className="p-1.5 bg-primary rounded-full text-white hover:shadow-primary/30 transition-all" 
-                  title="Change Photo Options"
-                >
-                  <Upload className="w-3.5 h-3.5" />
-                </motion.button>
-                {(profile.profileImage || profile.profilePhoto) && (
-                  <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
-                    onClick={handleRemovePhoto}
-                    className="p-1.5 bg-red-500 rounded-full text-white hover:shadow-red-500/30 transition-all" 
-                    title="Remove Photo"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </motion.button>
-                )}
-              </div>
-            )}
           </motion.div>
           <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileSelect} className="hidden" />
         </div>
@@ -646,6 +621,24 @@ const Profile = ({ isInsideSettings = false }) => {
                   Choose from Gallery
                 </span>
               </button>
+
+              {/* Option 3: Remove Current Photo */}
+              {(profile.profileImage || profile.profilePhoto) && (
+                <button 
+                  onClick={() => {
+                    setShowPhotoModal(false);
+                    handleRemovePhoto();
+                  }}
+                  className="flex items-center space-x-5 p-4 rounded-2xl hover:bg-red-50 active:bg-red-100 transition-all text-left w-full group"
+                >
+                  <div className="w-12 h-12 rounded-2xl bg-red-50 flex items-center justify-center text-red-500 group-hover:bg-red-100 transition-colors flex-shrink-0">
+                    <Trash2 className="w-6 h-6" />
+                  </div>
+                  <span className="font-extrabold text-sm tracking-wider text-red-600 uppercase">
+                    Remove Photo
+                  </span>
+                </button>
+              )}
             </motion.div>
           </motion.div>
         )}
