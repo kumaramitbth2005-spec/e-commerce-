@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Search, User, Menu, X, LogOut, Heart, ShoppingCart, ShoppingBag, PlusCircle, Home, LayoutDashboard, Loader2, LogIn, List } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
+import API from '../api';
 
 const Navbar = ({ isSidebarCollapsed }) => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -16,8 +17,8 @@ const Navbar = ({ isSidebarCollapsed }) => {
   const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAuth();
 
-  // All searchable items (pages + mock products)
-  const allItems = [
+  // All searchable static pages
+  const staticPages = [
     { id: 'p1', name: 'Home', type: 'page', path: '/', icon: '🏠' },
     { id: 'p2', name: 'Marketplace', type: 'page', path: '/marketplace', icon: '🛒' },
     { id: 'p3', name: 'Sell Resource', type: 'page', path: '/sell', icon: '📦' },
@@ -26,14 +27,6 @@ const Navbar = ({ isSidebarCollapsed }) => {
     { id: 'p6', name: 'Settings', type: 'page', path: '/settings', icon: '⚙️' },
     { id: 'p7', name: 'About Us', type: 'page', path: '/about', icon: 'ℹ️' },
     { id: 'p8', name: 'Wishlist', type: 'page', path: '/wishlist', icon: '❤️' },
-    { id: '1', name: 'Engineering Mechanics', type: 'product', price: '₹350', category: 'Engineering', image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=100' },
-    { id: '2', name: 'Casio FX-991EX Calculator', type: 'product', price: '₹850', category: 'Tools', image: 'https://images.unsplash.com/photo-1518118014377-ce94f3ba3734?w=100' },
-    { id: '3', name: 'Organic Chemistry Notes', type: 'product', price: '₹150', category: 'Notes', image: 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=100' },
-    { id: '4', name: 'Lab Coat - Medium', type: 'product', price: '₹200', category: 'Tools', image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=100' },
-    { id: '5', name: 'HCV Physics Part 1', type: 'product', price: '₹280', category: 'Engineering', image: 'https://images.unsplash.com/photo-1541963463532-d68292c34b19?w=100' },
-    { id: '6', name: 'Medical Anatomy Book', type: 'product', price: '₹1200', category: 'Medical', image: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?w=100' },
-    { id: '7', name: 'Thomas Calculus', type: 'product', price: '₹350', category: 'Engineering', image: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=100' },
-    { id: '8', name: 'Scientific Calculator', type: 'product', price: '₹899', category: 'Tools', image: 'https://images.unsplash.com/photo-1518118014377-ce94f3ba3734?w=100' },
   ];
 
   useEffect(() => {
@@ -61,16 +54,38 @@ const Navbar = ({ isSidebarCollapsed }) => {
       return;
     }
     setIsSearching(true);
-    const timer = setTimeout(() => {
+    const timer = setTimeout(async () => {
       const q = searchQuery.toLowerCase();
-      const results = allItems.filter(item =>
-        item.name.toLowerCase().includes(q) ||
-        (item.category && item.category.toLowerCase().includes(q))
+      
+      // Filter pages locally
+      const matchedPages = staticPages.filter(page =>
+        page.name.toLowerCase().includes(q)
       );
-      setSearchResults(results.slice(0, 8));
-      setShowResults(true);
-      setIsSearching(false);
-    }, 200);
+
+      try {
+        // Fetch matching products from backend API
+        const response = await API.get('/products', { params: { search: searchQuery } });
+        const backendProducts = response.data.map(prod => ({
+          id: prod._id,
+          name: prod.name,
+          type: 'product',
+          price: `₹${prod.price}`,
+          category: prod.category,
+          image: prod.images?.[0] || 'https://via.placeholder.com/100',
+          path: `/product/${prod._id}`
+        }));
+
+        const results = [...matchedPages, ...backendProducts];
+        setSearchResults(results.slice(0, 8));
+        setShowResults(true);
+      } catch (error) {
+        console.error('Error fetching search results:', error);
+        setSearchResults(matchedPages.slice(0, 8));
+        setShowResults(true);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 300);
     return () => clearTimeout(timer);
   }, [searchQuery]);
 

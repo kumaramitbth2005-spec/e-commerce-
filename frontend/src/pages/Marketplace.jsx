@@ -11,6 +11,10 @@ const Marketplace = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
   const [selectedProduct, setSelectedProduct] = useState(null);
+
+  useEffect(() => {
+    setSearchQuery(searchParams.get('search') || '');
+  }, [searchParams]);
   
   // Mock data as fallback
   const mockProducts = [
