@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   User, Mail, Phone, MapPin, FileText, Edit3, Save, Camera, 
   Upload, X, Loader2, Navigation, CheckCircle, AlertCircle, 
-  Home as HomeIcon, Trash2, KeyRound, Award
+  Home as HomeIcon, Trash2, KeyRound, Award, Image
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
@@ -18,6 +18,7 @@ const Profile = ({ isInsideSettings = false }) => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [fetchingLocation, setFetchingLocation] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
+  const [showPhotoModal, setShowPhotoModal] = useState(false);
   const [photoPreview, setPhotoPreview] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   
@@ -510,16 +511,24 @@ const Profile = ({ isInsideSettings = false }) => {
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
-          title="Drag and Drop an image, or click button to upload"
+          onClick={() => isEditing && setShowPhotoModal(true)}
+          title={isEditing ? "Click to change profile picture" : "Profile Picture"}
         >
           <motion.div 
-            whileHover={{ scale: 1.03 }}
+            whileHover={isEditing ? { scale: 1.03 } : {}}
             className={`w-32 h-32 md:w-36 md:h-36 rounded-full overflow-hidden border-4 transition-colors relative bg-navy-800 ${
               isDragging ? 'border-secondary shadow-[0_0_20px_rgba(0,242,255,0.4)]' : 'border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.3)]'
             }`}
           >
             <img src={getPhotoUrl()} alt="Profile" className="w-full h-full object-cover" />
             
+            {/* Hover Camera Overlay in Editing Mode */}
+            {isEditing && (
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                <Camera className="w-7 h-7 text-white" />
+              </div>
+            )}
+
             {/* Uploading Spinner & Overlay */}
             {uploadingPhoto && (
               <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center">
@@ -538,20 +547,13 @@ const Profile = ({ isInsideSettings = false }) => {
           
           {/* Picture Controls */}
           {isEditing && (
-            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 flex space-x-2 bg-navy-900 border border-white/10 p-1.5 rounded-full shadow-xl">
+            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 flex space-x-2 bg-navy-900 border border-white/10 p-1.5 rounded-full shadow-xl" onClick={(e) => e.stopPropagation()}>
               <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
-                onClick={() => fileInputRef.current?.click()}
+                onClick={() => setShowPhotoModal(true)}
                 className="p-2 bg-primary rounded-full text-white hover:shadow-primary/30 transition-all" 
-                title="Upload Photo"
+                title="Change Photo Options"
               >
                 <Upload className="w-3.5 h-3.5" />
-              </motion.button>
-              <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
-                onClick={startCamera}
-                className="p-2 bg-secondary rounded-full text-navy-900 hover:shadow-secondary/30 transition-all" 
-                title="Capture with Camera"
-              >
-                <Camera className="w-3.5 h-3.5" />
               </motion.button>
               {(profile.profileImage || profile.profilePhoto) && (
                 <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
@@ -592,6 +594,59 @@ const Profile = ({ isInsideSettings = false }) => {
           {profile.bio && <p className="text-gray-400 text-sm mt-3 line-clamp-3 bg-white/[0.02] p-3 rounded-lg border border-white/5">{profile.bio}</p>}
         </div>
       </div>
+
+      {/* Photo Option Modal */}
+      <AnimatePresence>
+        {showPhotoModal && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowPhotoModal(false)}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-[32px] p-8 max-w-sm w-full shadow-[0_24px_50px_rgba(0,0,0,0.3)] border border-gray-100 flex flex-col space-y-4"
+            >
+              {/* Option 1: Take Selfie */}
+              <button 
+                onClick={() => {
+                  setShowPhotoModal(false);
+                  startCamera();
+                }}
+                className="flex items-center space-x-5 p-4 rounded-2xl hover:bg-gray-50 active:bg-gray-100 transition-all text-left w-full group"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-pink-50 flex items-center justify-center text-pink-500 group-hover:bg-pink-100 transition-colors flex-shrink-0">
+                  <Camera className="w-6 h-6" />
+                </div>
+                <span className="font-extrabold text-sm tracking-wider text-slate-800 uppercase">
+                  Take Selfie
+                </span>
+              </button>
+
+              {/* Option 2: Choose from Gallery */}
+              <button 
+                onClick={() => {
+                  setShowPhotoModal(false);
+                  fileInputRef.current?.click();
+                }}
+                className="flex items-center space-x-5 p-4 rounded-2xl hover:bg-gray-50 active:bg-gray-100 transition-all text-left w-full group"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-pink-50 flex items-center justify-center text-pink-500 group-hover:bg-pink-100 transition-colors flex-shrink-0">
+                  <Image className="w-6 h-6" />
+                </div>
+                <span className="font-extrabold text-sm tracking-wider text-slate-800 uppercase">
+                  Choose from Gallery
+                </span>
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Camera Capture Modal */}
       <AnimatePresence>
