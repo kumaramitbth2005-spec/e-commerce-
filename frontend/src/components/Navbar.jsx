@@ -199,20 +199,9 @@ const Navbar = ({ isSidebarCollapsed }) => {
                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
                     className="absolute right-0 mt-3 w-52 rounded-2xl overflow-hidden bg-navy-900/95 backdrop-blur-3xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.4)]"
                   >
-                    <div className="p-4 border-b border-white/5 bg-white/[0.02]">
+                    <div className="p-4 bg-white/[0.02]">
                       <p className="font-bold text-white text-sm">{user?.name}</p>
                       <p className="text-[11px] text-gray-500">{user?.email}</p>
-                    </div>
-                    <div className="p-1.5 space-y-0.5">
-                      <Link to="/settings#profile" onClick={() => setIsUserMenuOpen(false)} className="flex items-center space-x-3 p-2.5 hover:bg-white/5 rounded-xl transition-colors text-gray-300 hover:text-white text-sm">
-                        <User className="w-4 h-4 text-secondary" /> <span>My Profile</span>
-                      </Link>
-                      <Link to="/settings#listings" onClick={() => setIsUserMenuOpen(false)} className="flex items-center space-x-3 p-2.5 hover:bg-white/5 rounded-xl transition-colors text-gray-300 hover:text-white text-sm">
-                        <List className="w-4 h-4 text-purple-400" /> <span>My Listings</span>
-                      </Link>
-                      <button onClick={() => { logout(); navigate('/login'); setIsUserMenuOpen(false); }} className="w-full flex items-center space-x-3 p-2.5 hover:bg-red-500/10 text-red-400 rounded-xl transition-colors text-sm">
-                        <LogOut className="w-4 h-4" /> <span>Logout</span>
-                      </button>
                     </div>
                   </motion.div>
                 )}

@@ -503,30 +503,6 @@ const Profile = ({ isInsideSettings = false }) => {
       transition={isInsideSettings ? {} : { delay: 0.1 }}
       className={`relative z-10 ${isInsideSettings ? '' : 'glass-card p-6 md:p-8'}`}
     >
-      {/* Profile Completion Indicator */}
-      <div className="mb-8 bg-white/5 p-4 rounded-xl border border-white/5">
-        <div className="flex justify-between items-center mb-2">
-          <div className="flex items-center space-x-2">
-            <Award className="w-5 h-5 text-secondary animate-bounce" />
-            <span className="text-sm font-bold text-gray-200">Profile Completion Progress</span>
-          </div>
-          <span className="text-sm font-black text-secondary">{completionPercentage}%</span>
-        </div>
-        <div className="w-full bg-white/10 h-2.5 rounded-full overflow-hidden">
-          <motion.div 
-            initial={{ width: 0 }}
-            animate={{ width: `${completionPercentage}%` }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
-            className="h-full bg-gradient-to-r from-primary via-secondary to-green-400"
-          />
-        </div>
-        {completionPercentage < 100 ? (
-          <p className="text-[11px] text-gray-400 mt-2">💡 Tip: Fill in all fields and upload a profile picture to complete your profile.</p>
-        ) : (
-          <p className="text-[11px] text-green-400 mt-2">🎉 Congratulations! Your profile is 100% complete.</p>
-        )}
-      </div>
-
       {/* Photo Section */}
       <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8 mb-8 pb-8 border-b border-white/10">
         <div 
