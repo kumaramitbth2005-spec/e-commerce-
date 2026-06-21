@@ -1,0 +1,14 @@
+{
+  "name": "edu-srot-root",
+  "version": "1.0.0",
+  "description": "Edu-स्त्रोत Campus Marketplace",
+  "scripts": {
+    "install-all": "npm install && cd Backend && npm install && cd ../frontend && npm install",
+    "backend": "cd Backend && npm start",
+    "frontend": "cd frontend && npm run dev",
+    "dev": "npx concurrently \"npm run backend\" \"npm run frontend\""
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

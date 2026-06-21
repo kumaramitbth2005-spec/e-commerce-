@@ -1,0 +1,232 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bg-900: #f8fafc;
+    --color-bg-900-rgb: 248, 250, 252;
+    --color-bg-800: #ffffff;
+    --color-bg-800-rgb: 255, 255, 255;
+    --color-bg-700: #f1f5f9;
+    --color-bg-700-rgb: 241, 245, 249;
+    --color-text: #0f172a;
+    --color-text-secondary: #475569;
+    --color-text-muted: #64748b;
+    --color-border: rgba(0, 0, 0, 0.08);
+    --color-glass-card: rgba(255, 255, 255, 0.85);
+    --color-glass-btn: rgba(0, 0, 0, 0.04);
+  }
+
+  html.dark {
+    --color-bg-900: #0a0b1e;
+    --color-bg-900-rgb: 10, 11, 30;
+    --color-bg-800: #121432;
+    --color-bg-800-rgb: 18, 20, 50;
+    --color-bg-700: #1a1d4a;
+    --color-bg-700-rgb: 26, 29, 74;
+    --color-text: #ffffff;
+    --color-text-secondary: #d1d5db;
+    --color-text-muted: #9ca3af;
+    --color-border: rgba(255, 255, 255, 0.08);
+    --color-glass-card: rgba(255, 255, 255, 0.1);
+    --color-glass-btn: rgba(255, 255, 255, 0.1);
+  }
+
+  body {
+    background-color: var(--color-bg-900);
+    color: var(--color-text);
+    @apply font-sans antialiased;
+    margin: 0;
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
+
+@layer components {
+  .glass-card {
+    background-color: var(--color-glass-card);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--color-border);
+    border-radius: 1rem;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+  
+  .glass-button {
+    background-color: var(--color-glass-btn);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--color-border);
+    transition: all 0.3s ease;
+    border-radius: 0.75rem;
+    padding: 0.5rem 1.5rem;
+  }
+
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary;
+  }
+
+  .gradient-border {
+    position: relative;
+    border-radius: 1rem;
+    background: linear-gradient(to right, #ff007a, #00f2ff);
+    padding: 1px;
+  }
+
+  .gradient-border-inner {
+    background-color: var(--color-bg-900);
+    border-radius: 0.95rem;
+    height: 100%;
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--color-bg-900);
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-navy-700 rounded-full hover:bg-navy-800;
+}
+
+/* Animations */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Light mode specificity overrides */
+html:not(.dark) .text-white {
+  color: #0f172a !important;
+}
+
+html:not(.dark) .text-gray-200 {
+  color: #1e293b !important;
+}
+
+html:not(.dark) .text-gray-300 {
+  color: #334155 !important;
+}
+
+html:not(.dark) .text-gray-400 {
+  color: #475569 !important;
+}
+
+html:not(.dark) .text-gray-500 {
+  color: #64748b !important;
+}
+
+html:not(.dark) .text-gray-600 {
+  color: #94a3b8 !important;
+}
+
+html:not(.dark) .border-white\/10 {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+html:not(.dark) .border-white\/5 {
+  border-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+html:not(.dark) .bg-white\/5 {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+}
+
+html:not(.dark) .bg-white\/10 {
+  background-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+html:not(.dark) input, 
+html:not(.dark) textarea,
+html:not(.dark) select {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) input::placeholder, 
+html:not(.dark) textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+html:not(.dark) aside {
+  background: #ffffff !important;
+  border-right: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html:not(.dark) aside span,
+html:not(.dark) aside button,
+html:not(.dark) aside a {
+  color: #475569 !important;
+}
+
+html:not(.dark) aside a.bg-secondary\/10,
+html:not(.dark) aside button.text-white {
+  background-color: rgba(0, 242, 255, 0.1) !important;
+  color: #0891b2 !important;
+}
+
+html:not(.dark) aside a:hover,
+html:not(.dark) aside button:hover {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+  color: #0f172a !important;
+}
+
+html:not(.dark) nav {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html:not(.dark) footer {
+  background-color: #ffffff !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+html:not(.dark) footer p,
+html:not(.dark) footer a {
+  color: #475569 !important;
+}
+
+/* Restore white text for elements that should remain white on solid primary/secondary/colored backgrounds */
+html:not(.dark) button .text-white,
+html:not(.dark) button.text-white,
+html:not(.dark) button,
+html:not(.dark) a.text-white,
+html:not(.dark) a.bg-primary,
+html:not(.dark) a.bg-gradient-to-r,
+html:not(.dark) .bg-primary .text-white,
+html:not(.dark) .bg-primary.text-white,
+html:not(.dark) .bg-secondary .text-white,
+html:not(.dark) .bg-secondary.text-white,
+html:not(.dark) .bg-green-500 .text-white,
+html:not(.dark) .bg-green-500.text-white,
+html:not(.dark) .bg-red-500 .text-white,
+html:not(.dark) .bg-red-500.text-white,
+html:not(.dark) .bg-gradient-to-r .text-white,
+html:not(.dark) .bg-gradient-to-r.text-white,
+html:not(.dark) .bg-gradient-to-tr .text-white,
+html:not(.dark) .bg-gradient-to-tr.text-white,
+html:not(.dark) .bg-blue-500 .text-white,
+html:not(.dark) .bg-blue-500.text-white,
+html:not(.dark) .bg-purple-500 .text-white,
+html:not(.dark) .bg-purple-500.text-white {
+  color: #ffffff !important;
+}
+
+/* Light mode hero background overlay override */
+html:not(.dark) .bg-gradient-to-r.from-navy-900\/90 {
+  background-image: linear-gradient(to right, rgba(248, 250, 252, 0.95), rgba(248, 250, 252, 0.8), rgba(248, 250, 252, 0.6)) !important;
+}
+html:not(.dark) .bg-gradient-to-t.from-navy-900 {
+  background-image: linear-gradient(to top, #f8fafc, transparent, rgba(248, 250, 252, 0.4)) !important;
+}
